@@ -1,1 +1,0 @@
-# 241028-Gomez-examen

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>ExamenWS</title>
+	</head>
+	<body>
+		<div>
+			<div>
+				<input type="text" id="inpUser">
+				<input type="text" id="inpMsgs">
+				<button onclick="sendMessage()">Save</button>
+			</div>
+			<div>
+				<div id="menssages"></div>
+			</div>
+		</div>
+		
+		<script th:inline="javascript">
+		
+			let socket = new WebSocket("ws://localhost:8080/chat");
+		
+			socket.onmessage = function(event){
+				let divMsgs = document.getElementById("menssages");
+				divMsgs.innerHTML += '<p>' + event.data + '</p>';
+			}
+			
+			function sendMessage(){
+				let username = document.getElementById("inpUser");
+				let messageInput = document.getElementById("inpMsgs");
+				
+				let fullMessage = username.value + ": " + messageInput.value;
+				socket.send(fullMessage);
+				
+				if("websocket" == messageInput.value){
+					let fullMessage = "Servidor: WebSocket es un protocolo de red basado en TCP en el cual los clientes (sockets) se comunican con entre si mediante el servidor que funcionacomo intermediario. El servidor una vez que reciva un mensage este lo replica a los demas clientes sin necesidad de que estos tengan que hacer un peticion al servidor. WebSocket utiliza el puerto 80 para conexiones WebSocket regulares y puerto 443 para conexiones WebSocket sobre TLS/SSL.";
+					socket.send(fullMessage);
+				}
+				
+				messageInput.value = '';
+			}
+			
+		</script>
+
+	</body>
+</html>
